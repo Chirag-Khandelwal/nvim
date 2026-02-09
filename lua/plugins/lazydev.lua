@@ -12,7 +12,7 @@ return {
     },
     { -- blink completion source for require statements and module annotations
         "saghen/blink.cmp",
-        build = 'cargo build --release',
+        version = '1.*',
         opts = {
             sources = {
                 -- add lazydev to your completion providers
