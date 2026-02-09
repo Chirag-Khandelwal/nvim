@@ -63,4 +63,4 @@ vim.g.snacks_animate = false
 
 vim.cmd.colorscheme("catppuccin-mocha")
 
-vim.cmd("Neotree")
+-- vim.cmd("Neotree")
