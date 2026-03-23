@@ -18,7 +18,6 @@ return {
             "fish",
             "git_config",
             "git_rebase",
-            "gitcommit",
             "gitignore",
             "javascript",
             "json",
@@ -57,18 +56,21 @@ return {
             "noice",
         }
 
-        -- Register the Feral parser BEFORE setup()
-        require("nvim-treesitter.parsers").feral = {
-            install_info = {
-                url = "https://github.com/Feral-Lang/tree-sitter-feral",
-                files = "src/parser.c",
-                branch = "main",
-                generate = false,
-                generate_from_json = false,
-                queries = "queries/feral",
-            },
-            -- filetype = "feral",
-        }
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "TSUpdate",
+            callback = function()
+                require("nvim-treesitter.parsers").feral = {
+                    install_info = {
+                        url = "https://github.com/Feral-Lang/tree-sitter-feral",
+                        revision = "79ad855bf9d5f9fb2d2af17b268f6940ef8f3b29", -- commit hash for revision to check out; HEAD if missing
+                        -- optional entries:
+                        generate = false, -- only needed if repo does not contain pre-generated `src/parser.c`
+                        generate_from_json = false, -- only needed if repo does not contain `src/grammar.json` either
+                        queries = "queries/feral", -- also install queries from given directory
+                    },
+                }
+            end,
+        })
 
         -- Filetype detection
         vim.filetype.add({
@@ -91,7 +93,7 @@ return {
                 local buf = event.buf
 
                 -- Install missing parsers (async, no-op if already installed)
-                -- ts.install({ lang })
+                ts.install({ lang })
 
                 -- start highlight immediately (works as long as parser exists)
                 pcall(vim.treesitter.start, buf, lang)

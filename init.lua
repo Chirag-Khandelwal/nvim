@@ -62,7 +62,7 @@ require("keymaps")
 vim.g.snacks_animate = false
 
 -- Colors
-vim.cmd.colorscheme("catppuccin-nvim")
+vim.cmd.colorscheme("rose-pine")
 -- vim.o.termguicolors = false
 
 -- vim.cmd("Neotree")
