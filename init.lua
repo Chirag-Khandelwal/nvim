@@ -61,7 +61,8 @@ require("keymaps")
 
 vim.g.snacks_animate = false
 
--- vim.cmd.colorscheme("catppuccin-mocha")
-vim.o.termguicolors = false
+-- Colors
+vim.cmd.colorscheme("catppuccin-nvim")
+-- vim.o.termguicolors = false
 
 -- vim.cmd("Neotree")
