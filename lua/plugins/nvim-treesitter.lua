@@ -54,12 +54,34 @@ return {
             "snacks_dashboard",
             "snacks_notif",
             "snacks_win",
+            "noice",
         }
 
-        -- Auto-install parsers and enable highlighting on FileType
+        -- Register the Feral parser BEFORE setup()
+        require("nvim-treesitter.parsers").feral = {
+            install_info = {
+                url = "https://github.com/Feral-Lang/tree-sitter-feral",
+                files = "src/parser.c",
+                branch = "main",
+                generate = false,
+                generate_from_json = false,
+                queries = "queries/feral",
+            },
+            -- filetype = "feral",
+        }
+
+        -- Filetype detection
+        vim.filetype.add({
+            extension = {
+                fer = "feral",
+                fecl = "feral",
+            },
+        })
+
         vim.api.nvim_create_autocmd("FileType", {
             group = group,
-            desc = "Enable treesitter highlighting and indentation",
+            desc = "Enable treesitter highlighting",
+            pattern = { "*" },
             callback = function(event)
                 if vim.tbl_contains(ignore_filetypes, event.match) then
                     return
@@ -68,14 +90,14 @@ return {
                 local lang = vim.treesitter.language.get_lang(event.match) or event.match
                 local buf = event.buf
 
-                -- Start highlighting immediately (works if parser exists)
+                -- Install missing parsers (async, no-op if already installed)
+                -- ts.install({ lang })
+
+                -- start highlight immediately (works as long as parser exists)
                 pcall(vim.treesitter.start, buf, lang)
 
                 -- Enable treesitter indentation
-                vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-
-                -- Install missing parsers (async, no-op if already installed)
-                ts.install({ lang })
+                -- vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
             end,
         })
     end,
